@@ -2,6 +2,7 @@ import UIKit
 import CoreML
 import Vision
 import ImageIO
+import SafariServices
 
 enum ChoateBuildings {
     case Archbold
@@ -9,6 +10,11 @@ enum ChoateBuildings {
     case Carl
     case Colony
     case Lanphier
+}
+
+enum processMode {
+    case Normal
+    case Attention
 }
 
 struct ChoateBuildingsDescription {
@@ -28,18 +34,54 @@ class ImageClassificationViewController: UIViewController {
     @IBOutlet weak var classificationView: UIVisualEffectView!
     @IBOutlet weak var descriptionView: UIVisualEffectView!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
     
-    
+    // MARK: - Initiate Variables
+    var currentMode: processMode = .Normal
     var classificationValues: [ChoateBuildings:Float] = [.Archbold:0, .Carl:0, .Colony:0, .Lanphier:0, .Sign:0]
     
+    
     // MARK: - Overrides
+    
     override func viewDidLoad() {
         descriptionView.isHidden = true
     }
     
+    // MARK: - Settings
+    
+    @IBAction func settingsClicked(_ sender: Any) {
+        let settings = UIAlertController(title: "Settings", message: "Which mode would you like to use?\nCurrent mode: \(currentMode)", preferredStyle: .actionSheet)
+        let normal = UIAlertAction(title: "Normal", style: .default) { action in
+            self.currentMode = .Normal
+        }
+        let attention = UIAlertAction(title: "Attention", style: .default) { action in
+            self.currentMode = .Attention
+        }
+        let help = UIAlertAction(title: "What are the difference?", style: .default) { action in
+            settings.dismiss(animated: false) {
+                let guide = UIAlertController(title: "What are the difference?", message: "There are two modes: Normal and Attention. Normal mode sends the selected photo directly to the Machine Learning models for processing. Attention mode uses framework Vision by Apple, to predict a region of the image where focus most likely is, and crop it. Attention mode allows the models to predict without any distractions but relies significantly on the angle and position of the photographer.", preferredStyle: .alert)
+                let ok = UIAlertAction(title: "Got it", style: .default, handler: nil)
+                let more = UIAlertAction(title: "Show me more", style: .default) { action in
+                    let url = URL(string: "https://developer.apple.com/documentation/vision/cropping_images_using_saliency")!
+                    let vc = SFSafariViewController(url: url)
+                    self.present(vc, animated: true)
+                }
+                
+                guide.addAction(ok)
+                guide.addAction(more)
+                self.present(guide, animated: true, completion: nil)
+            }
+        }
+        
+        settings.addAction(normal)
+        settings.addAction(attention)
+        settings.addAction(help)
+        
+        self.present(settings, animated: true, completion: nil)
+    }
+    
     // MARK: - Image Classification
     
-    /// - Tag: MLModelSetup
     lazy var classificationRequests: [VNCoreMLRequest] = {
         do {
             let model1 = try VNCoreMLModel(for: ChoateTourBuildingClassifier_1().model)
@@ -93,9 +135,40 @@ class ImageClassificationViewController: UIViewController {
         guard let ciImage = CIImage(image: image) else { fatalError("Unable to create \(CIImage.self) from \(image).") }
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let handler = VNImageRequestHandler(ciImage: ciImage, orientation: orientation)
+            let requestHandler = VNImageRequestHandler(ciImage: ciImage, orientation: orientation)
             do {
-                try handler.perform(self.classificationRequests)
+                if self.currentMode == .Normal {
+                    try requestHandler.perform(self.classificationRequests)
+                } else {
+                    let request = VNGenerateAttentionBasedSaliencyImageRequest(completionHandler: { [weak self] request, error in
+                        if let error = error {
+                            print(error)
+                        } else {
+                            let salientObservation = request.results?.first as? VNSaliencyImageObservation
+                            var unionOfSalientRegions = CGRect(x: 0, y: 0, width: 0, height: 0)
+                            let salientObjects = salientObservation?.salientObjects!
+                            
+                            for salientObject in salientObjects! {
+                                unionOfSalientRegions = unionOfSalientRegions.union(salientObject.boundingBox)
+                            }
+                            let salientRect = VNImageRectForNormalizedRect(unionOfSalientRegions, Int(ciImage.extent.size.width), Int(ciImage.extent.size.height))
+                            
+                            DispatchQueue.global(qos: .userInitiated).async {
+                                let croppedImage = ciImage.cropped(to: salientRect)
+                                
+                                DispatchQueue.main.async {
+                                    let newRequestHandler = VNImageRequestHandler(ciImage: croppedImage, orientation: orientation)
+                                    do {
+                                        try newRequestHandler.perform(self!.classificationRequests)
+                                    } catch {
+                                        print(error)
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    try requestHandler.perform([request])
+                }
             } catch {
                 print("Failed to perform classification.\n\(error.localizedDescription)")
             }
@@ -188,6 +261,18 @@ class ImageClassificationViewController: UIViewController {
         picker.sourceType = sourceType
         present(picker, animated: true)
     }
+    
+    // MARK: - Dark Mode Support
+    private func updateImageForCurrentTraitCollection() {
+        if traitCollection.userInterfaceStyle == .dark {
+        } else {
+        }
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateImageForCurrentTraitCollection()
+    }
 }
 
 extension ImageClassificationViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -199,13 +284,6 @@ extension ImageClassificationViewController: UIImagePickerControllerDelegate, UI
         picker.dismiss(animated: true)
         
         let image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as! UIImage
-        
-        let orientation = CGImagePropertyOrientation(image.imageOrientation)
-        let attentionRequest = VNImageRequestHandler(cgImage: image.cgImage!, orientation: orientation, options: [:])
-        
-        try? attentionRequest.perform([VNGenerateAttentionBasedSaliencyImageRequest()])
-        
-        // TODO: - Add logic to choose whether to use detected attention image or the original image to processing.
         imageView.image = image
         updateClassifications(for: image)
     }
