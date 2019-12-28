@@ -14,7 +14,6 @@
 		B261C5DE23A970000065834C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B261C5DD23A970000065834C /* Assets.xcassets */; };
 		B261C5E123A970000065834C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B261C5DF23A970000065834C /* LaunchScreen.storyboard */; };
 		B261C5E923A971290065834C /* ImageClassificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B261C5E823A971290065834C /* ImageClassificationViewController.swift */; };
-		B261C5EB23A9712D0065834C /* CGImagePropertyOrientation+UIImageOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B261C5EA23A9712D0065834C /* CGImagePropertyOrientation+UIImageOrientation.swift */; };
 		B261C5ED23A972DD0065834C /* ChoateTourBuildingClassifier 1.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B261C5EC23A972DD0065834C /* ChoateTourBuildingClassifier 1.mlmodel */; };
 		B261C5F123A9756E0065834C /* ChoateTourBuildingClassifier 2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B261C5F023A9756E0065834C /* ChoateTourBuildingClassifier 2.mlmodel */; };
 		B261C5F323A975780065834C /* ChoateTourBuildingClassifier 3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = B261C5F223A975780065834C /* ChoateTourBuildingClassifier 3.mlmodel */; };
@@ -33,7 +32,6 @@
 		B261C5E023A970000065834C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B261C5E223A970000065834C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B261C5E823A971290065834C /* ImageClassificationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageClassificationViewController.swift; sourceTree = "<group>"; };
-		B261C5EA23A9712D0065834C /* CGImagePropertyOrientation+UIImageOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImagePropertyOrientation+UIImageOrientation.swift"; sourceTree = "<group>"; };
 		B261C5EC23A972DD0065834C /* ChoateTourBuildingClassifier 1.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "ChoateTourBuildingClassifier 1.mlmodel"; sourceTree = "<group>"; };
 		B261C5F023A9756E0065834C /* ChoateTourBuildingClassifier 2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "ChoateTourBuildingClassifier 2.mlmodel"; sourceTree = "<group>"; };
 		B261C5F223A975780065834C /* ChoateTourBuildingClassifier 3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = "ChoateTourBuildingClassifier 3.mlmodel"; sourceTree = "<group>"; };
@@ -75,7 +73,6 @@
 				B261C5D423A96FFF0065834C /* AppDelegate.swift */,
 				B261C5D623A96FFF0065834C /* SceneDelegate.swift */,
 				B261C5E823A971290065834C /* ImageClassificationViewController.swift */,
-				B261C5EA23A9712D0065834C /* CGImagePropertyOrientation+UIImageOrientation.swift */,
 				B20B46E723AB046B006A9E4B /* Main.storyboard */,
 				B261C5EC23A972DD0065834C /* ChoateTourBuildingClassifier 1.mlmodel */,
 				B261C5F023A9756E0065834C /* ChoateTourBuildingClassifier 2.mlmodel */,
@@ -171,7 +168,6 @@
 				B261C5D723A96FFF0065834C /* SceneDelegate.swift in Sources */,
 				B261C5F923A9758E0065834C /* ChoateTourBuildingClassifier 6.mlmodel in Sources */,
 				B2189D2123AAEB1A00F231BE /* ChoateTourBuildingClassifier 7.mlmodel in Sources */,
-				B261C5EB23A9712D0065834C /* CGImagePropertyOrientation+UIImageOrientation.swift in Sources */,
 				B261C5F123A9756E0065834C /* ChoateTourBuildingClassifier 2.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
