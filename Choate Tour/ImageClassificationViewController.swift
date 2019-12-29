@@ -4,7 +4,7 @@ import Vision
 import ImageIO
 import SafariServices
 
-enum ChoateBuildings {
+enum ChoateBuilding {
     case Archbold
     case Sign
     case Carl
@@ -17,7 +17,7 @@ enum processMode {
     case Attention
 }
 
-struct ChoateBuildingsDescription {
+struct ChoateBuildingDescription {
     let Archbold = "Archbold is home to the Admission Office and Head of School and Associate Head of School’s Offices, while the upper two floors serve as a girls’ dorm. Built in 1928, Archbold originally served as the School’s first infirmary."
     let Sign = "This is the sign for the art buildings!"
     let Carl = "The Carl C. Icahn Center for Science was designed by award-winning architect I. M. Pei. Each floor of the three-story building is dedicated to its own discipline: physics, biology, and chemistry. The Center includes 22 classrooms and laboratories; a large reference/study area; a conservatory; and the 150-seat Getz Auditorium."
@@ -38,7 +38,7 @@ class ImageClassificationViewController: UIViewController {
     
     // MARK: - Initiate Variables
     var currentMode: processMode = .Normal
-    var classificationValues: [ChoateBuildings:Float] = [.Archbold:0, .Carl:0, .Colony:0, .Lanphier:0, .Sign:0]
+    var classificationValues: [ChoateBuilding:Float] = [.Archbold:0, .Carl:0, .Colony:0, .Lanphier:0, .Sign:0]
     
     
     // MARK: - Overrides
@@ -190,26 +190,26 @@ class ImageClassificationViewController: UIViewController {
                 for classification in classifications {
                     if !classification.confidence.isZero {
                         switch classification.identifier {
-                        case "Archbold": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Archbold]! + classification.confidence), forKey: ChoateBuildings.Archbold)
-                        case "Archbold-Back": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Archbold]! + classification.confidence), forKey: ChoateBuildings.Archbold)
-                        case "Archbold-Close": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Archbold]! + classification.confidence), forKey: ChoateBuildings.Archbold)
-                        case "Archbold-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Archbold]! + classification.confidence), forKey: ChoateBuildings.Archbold)
-                        case "Art-Center-Sign": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Sign]! + classification.confidence), forKey: ChoateBuildings.Sign)
-                        case "Carl-C-Icahn-Center": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Carl]! + classification.confidence), forKey: ChoateBuildings.Carl)
-                        case "Carl-C-Icahn-Center-Close": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Carl]! + classification.confidence), forKey: ChoateBuildings.Carl)
-                        case "Carl-C-Icahn-Center-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Carl]! + classification.confidence), forKey: ChoateBuildings.Carl)
-                        case "Carl-C-Icahn-Center-side": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Carl]! + classification.confidence), forKey: ChoateBuildings.Carl)
-                        case "Colony-Hall": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Colony-Hall-Back": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Colony-Hall-Close": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Colony-Hall-Corner": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Colony-Hall-Far": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Colony-Hall-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Colony-Hall-Side-Far": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Colony-Hall-Stair": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Colony]! + classification.confidence), forKey: ChoateBuildings.Colony)
-                        case "Lanphier-Center": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Lanphier]! + classification.confidence), forKey: ChoateBuildings.Lanphier)
-                        case "Lanphier-Center-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Lanphier]! + classification.confidence), forKey: ChoateBuildings.Lanphier)
-                        case "Lanphier-Center-Side-2": self.classificationValues.updateValue((self.classificationValues[ChoateBuildings.Lanphier]! + classification.confidence), forKey: ChoateBuildings.Lanphier)
+                        case "Archbold": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Archbold]! + classification.confidence), forKey: ChoateBuilding.Archbold)
+                        case "Archbold-Back": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Archbold]! + classification.confidence), forKey: ChoateBuilding.Archbold)
+                        case "Archbold-Close": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Archbold]! + classification.confidence), forKey: ChoateBuilding.Archbold)
+                        case "Archbold-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Archbold]! + classification.confidence), forKey: ChoateBuilding.Archbold)
+                        case "Art-Center-Sign": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Sign]! + classification.confidence), forKey: ChoateBuilding.Sign)
+                        case "Carl-C-Icahn-Center": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Carl]! + classification.confidence), forKey: ChoateBuilding.Carl)
+                        case "Carl-C-Icahn-Center-Close": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Carl]! + classification.confidence), forKey: ChoateBuilding.Carl)
+                        case "Carl-C-Icahn-Center-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Carl]! + classification.confidence), forKey: ChoateBuilding.Carl)
+                        case "Carl-C-Icahn-Center-side": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Carl]! + classification.confidence), forKey: ChoateBuilding.Carl)
+                        case "Colony-Hall": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Colony-Hall-Back": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Colony-Hall-Close": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Colony-Hall-Corner": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Colony-Hall-Far": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Colony-Hall-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Colony-Hall-Side-Far": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Colony-Hall-Stair": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Colony]! + classification.confidence), forKey: ChoateBuilding.Colony)
+                        case "Lanphier-Center": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Lanphier]! + classification.confidence), forKey: ChoateBuilding.Lanphier)
+                        case "Lanphier-Center-Side": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Lanphier]! + classification.confidence), forKey: ChoateBuilding.Lanphier)
+                        case "Lanphier-Center-Side-2": self.classificationValues.updateValue((self.classificationValues[ChoateBuilding.Lanphier]! + classification.confidence), forKey: ChoateBuilding.Lanphier)
                         default: fatalError()
                         }
                     }
@@ -220,11 +220,11 @@ class ImageClassificationViewController: UIViewController {
                 self.classificationView.isHidden = true
                 
                 switch greatestClassification!.key {
-                case ChoateBuildings.Archbold: self.descriptionLabel.text = "Archbold\n\n\(ChoateBuildingsDescription().Archbold)"
-                case ChoateBuildings.Sign: self.descriptionLabel.text = "Sign\n\n\(ChoateBuildingsDescription().Sign)"
-                case ChoateBuildings.Carl: self.descriptionLabel.text = "Carl C. Icahn Center for Science\n\n\(ChoateBuildingsDescription().Carl)"
-                case ChoateBuildings.Colony: self.descriptionLabel.text = "Ann and George Colony Hall\n\n\(ChoateBuildingsDescription().Colony)"
-                case ChoateBuildings.Lanphier: self.descriptionLabel.text = "Lanphier Center for Mathematics and Computer Science\n\n\(ChoateBuildingsDescription().Lanphier)"
+                case ChoateBuilding.Archbold: self.descriptionLabel.text = "Archbold\n\n\(ChoateBuildingDescription().Archbold)"
+                case ChoateBuilding.Sign: self.descriptionLabel.text = "Sign\n\n\(ChoateBuildingDescription().Sign)"
+                case ChoateBuilding.Carl: self.descriptionLabel.text = "Carl C. Icahn Center for Science\n\n\(ChoateBuildingDescription().Carl)"
+                case ChoateBuilding.Colony: self.descriptionLabel.text = "Ann and George Colony Hall\n\n\(ChoateBuildingDescription().Colony)"
+                case ChoateBuilding.Lanphier: self.descriptionLabel.text = "Lanphier Center for Mathematics and Computer Science\n\n\(ChoateBuildingDescription().Lanphier)"
                 }
                 self.descriptionView.isHidden = false
             }
